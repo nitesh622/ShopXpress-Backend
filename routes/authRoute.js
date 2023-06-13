@@ -7,32 +7,7 @@ require('dotenv').config();
 
 const nodemailer = require("nodemailer");
 
-// async function mailer() {
-//   let transporter = nodemailer.createTransport({
-//     host: "smtp.gmail.com",
-//     port: 587,
-//     secure: false,
-//     auth: {
-//       user: "tempgacc1234@gmail.com",
-//       pass: "hnttfdwnohzjtcae",
-//     },
-//   });
-
-//   let info = await transporter.sendMail({
-//     from: "tempgacc1234@gmail.com",
-//     to: "niteshshakya2@gmail.com",
-//     subject: "Sign Up Verification",
-//     text: "Your Verification Code for signup in ShopXpress is 1234",
-//     html: "<b>Your Verification Code for signup in ShopXpress is 1234</b>",
-//   });
-
-//   console.log("Message sent: %s", info.messageId);
-
-//   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-// }
-
 router.post('/verify', async (req, res) => {
-    // res.send({message: 'Verification Page'});
     const {name, email,phoneNo, password} = req.body;
     const user = new User({
         name,
@@ -65,29 +40,26 @@ router.post('/signup', async (req, res) => {
             const phoneNoExist = await User.findOne({phoneNo: phoneNo});
 
             if(emailExist) {
-                // console.log('Email already exist');
                 return res.status(422).send({status: 'Failed', error: 'Email already exist!'});
             }
             else if(phoneNoExist) {
-                // console.log('Phone no already exist');
                 return res.status(422).send({status: 'Failed', error: 'Phone Number already exist!'});
             }
             else {
                 const otp = Math.floor(1000 + Math.random()*9000);
-                // res.send({otp});
 
                 let transporter = nodemailer.createTransport({
                     host: "smtp.gmail.com",
                     port: 587,
                     secure: false,
                     auth: {
-                        user: "tempgacc1234@gmail.com",
-                        pass: "hnttfdwnohzjtcae",
+                        user: process.env.nodemailer_ID,
+                        pass: process.env.nodemailer_Pass,
                     },
                 });
             
                 let info = await transporter.sendMail({
-                    from: "tempgacc1234@gmail.com",
+                    from: process.env.nodemailer_ID,
                     to: `${email}`,
                     subject: "Sign Up Verification",
                     text: `Your Verification Code for signup in ShopXpress is ${otp}`,
