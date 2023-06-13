@@ -12,7 +12,6 @@ app.use(bodyParser.json());
 app.use(authRoute);
 
 app.get('/',requireToken, (req, res) => {
-    console.log(req.user);
     res.send('Hello World');
 })
 

@@ -28,7 +28,6 @@ router.post('/verify', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-    console.log('Before saving: ', req.body);
     const {name, email,phoneNo, password} = req.body;
 
     if(!name || !email || !phoneNo || !password) {
@@ -70,24 +69,7 @@ router.post('/signup', async (req, res) => {
             
                 console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
-                res.send({otp: otp})
-
-                // const user = new User({
-                //     name,
-                //     email,
-                //     phoneNo,
-                //     password        
-                // });
-            
-                // try {
-                //     await user.save();
-                //     const token = jwt.sign({_id: user._id}, process.env.jwt_secret)
-                //     return res.send({token: token});
-                // }
-                // catch(err) {
-                //     console.log('some error while saving: ', err);
-                //     return res.send({status: 'Failed', error: err.message});
-                // }
+                res.send({message: 'otp sent'})
             }
         }
         catch(err) {
